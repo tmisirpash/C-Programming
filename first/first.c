@@ -1,0 +1,48 @@
+#include<stdio.h>
+#include<stdlib.h>
+int main(int argc, char** argv)
+{
+  FILE *f = fopen(argv[1], "r");
+  int inputs = 0;
+  int number = 0;
+  fscanf(f, "%d\n", &inputs);
+  int i;
+  for(i = 0; i < inputs; i++)
+    {
+      int checker = 1;
+      fscanf(f, "%d\n", &number);
+      if (number <= 1)
+	{
+	  checker = 0;
+	}
+      else
+	{
+	  while (number != 0)
+	    {
+	      int j;
+	      for (j = 2; j <= number/2; j++)
+		{
+		  if (number % j == 0)
+		    {
+		      checker = 0;
+		      break;
+		    }
+		}
+	      if (checker == 0)
+		{
+		  break;
+		}
+	      number = number / 10;
+	    }
+	}
+      if (checker == 1)
+	{
+	  printf("yes\n");
+	}
+      else
+	{
+	  printf("no\n");
+	}
+    }
+  return 0;
+}

@@ -1,0 +1,99 @@
+#include<stdlib.h>
+#include<stdio.h>
+
+struct node
+{
+  int data;
+  int height;
+  struct node* left;
+  struct node* right;
+};
+
+struct node * makeNode(int);
+
+void searchNode(int data, struct node * r)
+{
+  if (r == NULL)
+    {
+      printf("absent\n");
+    }
+  else if (r->data == data)
+    {
+      printf("present %d\n", r->height);
+    }
+  else if (data < r->data)
+    {
+      searchNode(data, r->left);
+    }
+  else
+    {
+      searchNode(data, r->right);
+    }
+}
+struct node * insertNode(int data, struct node * r, int h)
+{
+  if (r == NULL)
+    {
+      struct node * temp = makeNode(data);
+      temp->height = h;
+      printf("inserted %d\n", temp->height);
+      return  temp;
+    }
+  else if (data == r->data)
+    {
+      printf("duplicate\n");
+      return r;
+    }
+  else if (data < r->data)
+    {
+      r->left = insertNode(data, r->left, h+1);
+     return r;
+    }
+  else
+    {
+      r->right = insertNode(data, r->right, h+1);
+     return r;
+    }
+}
+struct node * makeNode(int data)
+{
+  struct node * n = malloc(sizeof(struct node));
+  n->height = 0;
+  n->data = data;
+  n->left = NULL;
+  n->right = NULL;
+  return n;
+}
+int main(int argc, char ** argv)
+{
+  FILE *f = fopen(argv[1], "r");
+  if (f == NULL)
+    {
+      printf("error\n");
+      return 0;
+    }
+  char operation;
+  int number;
+  struct node * root = NULL;
+  int r = fscanf(f, "%c\t%d\n", &operation, &number);
+  while (r == 2)
+    {
+      if (operation == 'i')
+	{
+	  if (root == NULL)
+	    {
+	      root = insertNode(number, root, 1);
+	    }
+	  else
+	    {
+	      insertNode(number, root, 1);
+	    }
+       	}
+      else
+	{
+	   searchNode(number, root);
+	}
+      r = fscanf(f, "%c\t%d\n", &operation, &number);
+    }
+  return 0;
+}
